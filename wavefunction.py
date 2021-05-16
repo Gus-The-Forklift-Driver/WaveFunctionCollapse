@@ -1,6 +1,6 @@
 import random
 import sys
-
+import utils
 
 # def propagate(grid,gridSize):
 #     print('**************PROPAGATING**************')
@@ -70,108 +70,136 @@ import sys
 #                     print('end')
 #
 
-def propagate(grid, gridSize, cell):
+# def propagate(grid, gridSize, cell):
+#     x = cell[0]
+#     y = cell[1]
+#     updated = False
+#     if len(grid[x][y]) == 1:
+#         return
+#     # check if no too high
+#     if y == 0:
+#         pass
+#     else:
+#         # check if can connect with adjacent cell
+#         if '0' not in str(grid[x][y].values()):
+#             # if not remove 'bad'  from the adjacent cell
+#             for keys in list(grid[x][y - 1]):
+#                 if '2' in str(grid[x][y - 1][keys]):
+#                     grid[x][y - 1].pop(keys)
+#                     updated = True
+#             if updated :
+#                 propagate(grid,gridSize,(x,y-1))
+#                 updated = False
+#         else :
+#             for keys in list(grid[x][y - 1]):
+#                 if '2' not in str(grid[x][y - 1][keys]):
+#                     grid[x][y - 1].pop(keys)
+#                     updated = True
+#             if updated :
+#                 propagate(grid,gridSize,(x,y-1))
+#                 updated = False
+#
+#     if y == gridSize[1] - 1:
+#         pass
+#     else:
+#         if '2' not in str(grid[x][y].values()):
+#             for keys in list(grid[x][y + 1]):
+#                 if '0' in str(grid[x][y + 1][keys]):
+#                     grid[x][y + 1].pop(keys)
+#                     updated = True
+#             if updated:
+#                 propagate(grid, gridSize, (x, y + 1))
+#                 updated = False
+#         else :
+#             for keys in list(grid[x][y + 1]):
+#                 if '0' not in str(grid[x][y + 1][keys]):
+#                     grid[x][y + 1].pop(keys)
+#                     updated = True
+#             if updated :
+#                 propagate(grid,gridSize,(x,y+1))
+#                 updated = False
+#
+#     if x == 0:
+#         pass
+#     else:
+#         if '3' not in str(grid[x][y].values()):
+#             for keys in list(grid[x - 1][y]):
+#                 if '1' in str(grid[x - 1][y][keys]):
+#                     grid[x - 1][y].pop(keys)
+#                     updated = True
+#             if updated:
+#                 propagate(grid, gridSize, (x-1, y ))
+#                 updated = False
+#         else :
+#             for keys in list(grid[x-1][y]):
+#                 if '1' not in str(grid[x-1][y][keys]):
+#                     grid[x-1][y].pop(keys)
+#                     updated = True
+#             if updated :
+#                 propagate(grid,gridSize,(x-1,y))
+#                 updated = False
+#
+#     if x == gridSize[0] - 1:
+#         pass
+#     else:
+#         if '3' not in str(grid[x][y].values()):
+#             for keys in list(grid[x + 1][y]):
+#                 if '1' in str(grid[x + 1][y][keys]):
+#                     grid[x + 1][y].pop(keys)
+#                     updated = True
+#             if updated:
+#                 propagate(grid, gridSize, (x+1, y))
+#         else :
+#             for keys in list(grid[x+1][y]):
+#                 if '1' not in str(grid[x+1][y][keys]):
+#                     grid[x+1][y].pop(keys)
+#                     updated = True
+#             if updated :
+#                 propagate(grid,gridSize,(x+1,y))
+#                 updated = False
+#
+#
+#     if updated:
+#         # if done any changes to the current cell propagate to adjacent ones
+#         updateAdjacent(grid, gridSize, cell)
+
+def propagate(grid, gridSize,cell):
     x = cell[0]
     y = cell[1]
-    updated = False
     if len(grid[x][y]) == 1:
         return
+
+    updated = False
     # check if no too high
-    if y == 0:
-        pass
-    else:
-        # check if can connect with adjacent cell
-        if '0' not in str(grid[x][y].values()):
-            # if not remove 'bad'  from the adjacent cell
-            for keys in list(grid[x][y - 1]):
-                if '2' in str(grid[x][y - 1][keys]):
-                    grid[x][y - 1].pop(keys)
-                    updated = True
-            if updated :
-                propagate(grid,gridSize,(x,y-1))
-                updated = False
-        else :
-            for keys in list(grid[x][y - 1]):
-                if '2' not in str(grid[x][y - 1][keys]):
-                    grid[x][y - 1].pop(keys)
-                    updated = True
-            if updated :
-                propagate(grid,gridSize,(x,y-1))
-                updated = False
+    if y != 0:
+        if updateCell(grid[x][y],grid[x][y-1],2):
+            updated = True
 
-    if y == gridSize[1] - 1:
-        pass
-    else:
-        if '2' not in str(grid[x][y].values()):
-            for keys in list(grid[x][y + 1]):
-                if '0' in str(grid[x][y + 1][keys]):
-                    grid[x][y + 1].pop(keys)
-                    updated = True
-            if updated:
-                propagate(grid, gridSize, (x, y + 1))
-                updated = False
-        else :
-            for keys in list(grid[x][y + 1]):
-                if '0' not in str(grid[x][y + 1][keys]):
-                    grid[x][y + 1].pop(keys)
-                    updated = True
-            if updated :
-                propagate(grid,gridSize,(x,y+1))
-                updated = False
+    if y != gridSize[1]-1:
+        if updateCell(grid[x][y], grid[x][y + 1], 0):
+            updated = True
 
-    if x == 0:
-        pass
-    else:
-        if '3' not in str(grid[x][y].values()):
-            for keys in list(grid[x - 1][y]):
-                if '1' in str(grid[x - 1][y][keys]):
-                    grid[x - 1][y].pop(keys)
-                    updated = True
-            if updated:
-                propagate(grid, gridSize, (x-1, y ))
-                updated = False
-        else :
-            for keys in list(grid[x-1][y]):
-                if '1' not in str(grid[x-1][y][keys]):
-                    grid[x-1][y].pop(keys)
-                    updated = True
-            if updated :
-                propagate(grid,gridSize,(x-1,y))
-                updated = False
+    if x != 0:
+        if updateCell(grid[x][y], grid[x-1][y], 1):
+            updated = True
 
-    if x == gridSize[0] - 1:
-        pass
-    else:
-        if '3' not in str(grid[x][y].values()):
-            for keys in list(grid[x + 1][y]):
-                if '1' in str(grid[x + 1][y][keys]):
-                    grid[x + 1][y].pop(keys)
-                    updated = True
-            if updated:
-                propagate(grid, gridSize, (x+1, y))
-        else :
-            for keys in list(grid[x+1][y]):
-                if '1' not in str(grid[x+1][y][keys]):
-                    grid[x+1][y].pop(keys)
-                    updated = True
-            if updated :
-                propagate(grid,gridSize,(x+1,y))
-                updated = False
-
+    if x != gridSize[0]-1:
+        if updateCell(grid[x][y], grid[x+1][y], 3):
+            updated = True
 
     if updated:
-        # if done any changes to the current cell propagate to adjacent ones
-        updateAdjacent(grid, gridSize, cell)
+        updateAdjacent(grid,gridSize,cell)
+
 
 
 def updateAdjacent(grid, gridSize, cell):
     x = cell[0]
     y = cell[1]
-    if x != gridSize[0]:
+    if x != gridSize[0]-1:
         propagate(grid, gridSize, (x + 1, y))
     if x != 0:
         propagate(grid, gridSize, (x - 1, y))
-    if y != gridSize[1]:
+    if y != gridSize[1]-1:
         propagate(grid, gridSize, (x, y + 1))
     if y != 0:
         propagate(grid, gridSize, (x, y - 1))
@@ -198,8 +226,19 @@ def consolidateEntropy(entropyGrid, gridSize):
                 coords.clear()
                 coords.append((x, y))
 
-
     if min == 50 :
         return False
     else:
         return random.choice(coords)
+
+def updateCell(source, destination, direction):
+    updated = False
+    possibleTile = utils.possibleTiles(destination, direction)
+    #print(possibleTile)
+    for sourceTiles in list(source):
+        if sourceTiles not in possibleTile:
+            #print(f'no match with source : {sourceTiles} destination : {possibleTile}')
+            #sys.stdout.flush()
+            source.pop(sourceTiles)
+            updated = True
+    return  updated

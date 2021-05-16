@@ -5,8 +5,8 @@ from PIL import Image
 
 #initiate variables
 
-gridSize = (20,20)
-gridResolution = (5,5)
+gridSize = (10,10)
+gridResolution = (10,10)
 # 0,0 is top left corner
 # 0 : up
 # 1 : right
@@ -14,20 +14,23 @@ gridResolution = (5,5)
 # 3 : left
 tiles = {
 
-    "1": [1, 2, 3, 4],
-    "2": [1, 2, 3],
-    "3": [1, 2],
-    "4": [0, 1],
-    "5": [0, 3],
-    "6": [2, 3],
-    "7": [0, 1, 2],
-    "8": [0, 1, 3],
-    "9": [0, 2, 3],
+    1: [[1, 2, 3,6,7,9],[1, 2, 5,6,8,9],[1, 4,5,7,8,9],[1, 2, 3, 4,7,8]],
+    2: [[],[1, 2, 5,6,8,9],[1, 4,5,7,8,9],[1, 2, 3, 4,7,8]],
+    3: [[],[1, 2, 3, 5,6,8,9],[1, 4,5,7,8,9],[]],
+    4: [[1, 2, 3, 6,7,9],[1, 2,  5,6,8,9],[],[]],
+    5: [[1, 2, 3,6,7,9],[],[],[1, 2, 3, 4,7,8]],
+    6: [[],[],[1, 4,5,7,8,9],[1, 2, 3, 4,7,8]],
+    7: [[1, 2, 3,6,7,9],[1, 2, 5,6,8,9],[1, 4,5,7,8,9],[]],
+    8: [[1, 2, 3,6,7,9],[1, 2, 5,6,8,9],[],[1, 2, 3, 4,7,8]],
+    9: [[1, 2, 3,6,7,9],[],[1, 4,5,7,8,9],[1, 2, 3, 4,7,8]],
 }
 
 grid = utils.createArray(gridSize,tiles)
 
 #choose a starting tile
+
+# import json
+# print(json.dumps(grid))
 
 startX = random.randint(0,gridSize[0]-1)
 startY = random.randint(0,gridSize[1]-1)
@@ -38,9 +41,10 @@ grid[startX][startY].clear()
 grid[startX][startY] = {startKey:startTile}
 
 
-wavefunction.propagate(grid,gridSize,(startX,startY))
+wavefunction.updateAdjacent(grid,gridSize,(startX,startY))
 
 print (wavefunction.entropyMap(grid, gridSize))
+
 ID = 0
 while True:
     entropyMap = wavefunction.entropyMap(grid,gridSize)
@@ -53,6 +57,7 @@ while True:
     newTile = tiles[newKey]
     grid[coord[0]][coord[1]].clear()
     grid[coord[0]][coord[1]] = {newKey:newTile}
+    wavefunction.updateAdjacent(grid,gridSize,(coord[0],coord[1]))
     utils.renderGrid(grid,gridResolution,gridSize,ID)
     ID += 1
     #print(f'with key {newKey}')
@@ -61,4 +66,6 @@ while True:
     wavefunction.propagate(grid,gridSize,coord)
 print('--------Done--------')
 print(grid)
+
+
 
