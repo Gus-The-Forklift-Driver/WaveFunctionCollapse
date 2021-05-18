@@ -2,6 +2,7 @@ import random
 import sys
 import utils
 
+
 # def propagate(grid,gridSize):
 #     print('**************PROPAGATING**************')
 #     sys.stdout.flush()
@@ -163,7 +164,7 @@ import utils
 #         # if done any changes to the current cell propagate to adjacent ones
 #         updateAdjacent(grid, gridSize, cell)
 
-def propagate(grid, gridSize,cell):
+def propagate(grid, gridSize, cell):
     x = cell[0]
     y = cell[1]
     if len(grid[x][y]) == 1:
@@ -172,34 +173,33 @@ def propagate(grid, gridSize,cell):
     updated = False
     # check if no too high
     if y != 0:
-        if updateCell(grid[x][y],grid[x][y-1],2):
+        if updateCell(grid[x][y], grid[x][y - 1], 2):
             updated = True
 
-    if y != gridSize[1]-1:
+    if y != gridSize[1] - 1:
         if updateCell(grid[x][y], grid[x][y + 1], 0):
             updated = True
 
     if x != 0:
-        if updateCell(grid[x][y], grid[x-1][y], 1):
+        if updateCell(grid[x][y], grid[x - 1][y], 1):
             updated = True
 
-    if x != gridSize[0]-1:
-        if updateCell(grid[x][y], grid[x+1][y], 3):
+    if x != gridSize[0] - 1:
+        if updateCell(grid[x][y], grid[x + 1][y], 3):
             updated = True
 
     if updated:
-        updateAdjacent(grid,gridSize,cell)
-
+        updateAdjacent(grid, gridSize, cell)
 
 
 def updateAdjacent(grid, gridSize, cell):
     x = cell[0]
     y = cell[1]
-    if x != gridSize[0]-1:
+    if x != gridSize[0] - 1:
         propagate(grid, gridSize, (x + 1, y))
     if x != 0:
         propagate(grid, gridSize, (x - 1, y))
-    if y != gridSize[1]-1:
+    if y != gridSize[1] - 1:
         propagate(grid, gridSize, (x, y + 1))
     if y != 0:
         propagate(grid, gridSize, (x, y - 1))
@@ -226,19 +226,20 @@ def consolidateEntropy(entropyGrid, gridSize):
                 coords.clear()
                 coords.append((x, y))
 
-    if min == 50 :
+    if min == 50:
         return False
     else:
         return random.choice(coords)
 
+
 def updateCell(source, destination, direction):
     updated = False
     possibleTile = utils.possibleTiles(destination, direction)
-    #print(possibleTile)
+    # print(possibleTile)
     for sourceTiles in list(source):
         if sourceTiles not in possibleTile:
-            #print(f'no match with source : {sourceTiles} destination : {possibleTile}')
-            #sys.stdout.flush()
+            # print(f'no match with source : {sourceTiles} destination : {possibleTile}')
+            # sys.stdout.flush()
             source.pop(sourceTiles)
             updated = True
-    return  updated
+    return updated
