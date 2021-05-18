@@ -6,7 +6,7 @@ class graphics:
         self.gridResolution = gridResolution
         self.gridSize = gridSize
         self.image = Image.new('RGB', (gridResolution[0]*gridSize[0],gridResolution[1]*gridSize[1]))
-        self.tiles = utils.loadImages(tiles)
+        self.tiles = utils.load_images(tiles)
     def setTile(self,location:tuple,tile):
 
         self.image.paste(self.tiles[tile],(location[0]*self.gridResolution[0],location[1]*self.gridResolution[1]))
